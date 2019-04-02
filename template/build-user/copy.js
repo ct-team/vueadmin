@@ -52,10 +52,9 @@ var portReplace = function() {
                     config.baseUrl.replace(/\[webport\]/i, portStr) +
                     config.appUrl;
                 var currUrl = baseUrl + 'assets';
-
                 var result = data.replace(/(={1})((\.)?\/assets)/gi, '$1' + currUrl);
 
-                result = result.replace(/(\.)?\/static\//gi, currUrl + '/');
+                result = result.replace(/(={1})((\.)?\/static\/)/gi, '$1' + currUrl + '/');
 
                 result = result.replace(/<configBaseUrl>/g, baseUrl);
                 result = result.replace(

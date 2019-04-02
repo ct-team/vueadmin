@@ -1,11 +1,11 @@
 module.exports = {
-    version:'1.0.0',
+    version:'1.1.0', //脚手架版本【不需改动】
     chunk: true, //是否开启动态chunk
     check: false,//是否增加错误收集
     appID: 'test', //项目服务代号
     appVersion:'1.0.0', //项目版本 会显示在页面meta内
-    baseUrl: '//admin.tcy365[webport]', //项目资源根目录 [webport] 后缀标识符 默认不修改
-    appUrl: '/admintest/', //项目路径  如   /mobile/test/    
+    baseUrl: '//static.comfun[webport]', //项目资源根目录 [webport] 后缀标识符 默认不修改
+    appUrl: '/static/customerAdm/customer-v1.0.0/', //项目路径  如   /mobile/test/    
     /* px2rem: null,//px2rem 转换内容 如 { rootValue: 100 } 非rem项目 使用null */
     px2rem: null,
     list: [
