@@ -2,7 +2,6 @@
 const path = require('path');
 const utils = require('./utils');
 const config = require('../config');
-const vuxLoader = require('vux-loader');
 const vueLoaderConfig = require('./vue-loader.conf');
 const buildUser = require('../build-user');
 var TransformModulesPlugin = require('webpack-transform-modules-plugin');
@@ -127,18 +126,5 @@ const webpackConfig = {
         child_process: 'empty'
     }
 };
-//vux
-module.exports = vuxLoader.merge(webpackConfig, {
-    plugins: [
-        {
-            name: 'vux-ui'
-        },
-        // {
-        //     name: 'less-theme',
-        //     path: 'src/assets/css/vux/theme.less'
-        // },
-        {
-            name: 'duplicate-style'
-        }
-    ]
-});
+
+module.exports = webpackConfig;
