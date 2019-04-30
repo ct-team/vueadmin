@@ -54,18 +54,9 @@ var portReplace = function() {
                 var currUrl = baseUrl + 'assets';
                 var result = data.replace(/(={1})((\.)?\/assets)/gi, '$1' + currUrl);
 
-                result = result.replace(/(={1})((\.)?\/static\/)/gi, '$1' + currUrl + '/');
+                result = result.replace(/(={1}(\")?(\')?)((\.)?\/static\/)/gi, '$1' + currUrl + '/');
 
                 result = result.replace(/<configBaseUrl>/g, baseUrl);
-                result = result.replace(
-                    /static\.tcy365\.com\:2505/g,
-                    'staticpre.tcy365.com:2505'
-                );
-
-                result = result.replace(
-                    /static\.tcy365\.com\:2506/g,
-                    'staticpre.tcy365.com:2506'
-                );
 
                 result = clearEnv(result, obj.env);
                 result = clearOtherEnv(result, obj.env);
