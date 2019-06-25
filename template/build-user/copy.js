@@ -45,8 +45,9 @@ var portReplace = function() {
 
         entryHtml.forEach(f => {
             fs.readFile(f, 'utf8', function(err, data) {
+
                 if (err) {
-                    return console.log(err);
+                    throw err;
                 }
                 //var result = data.replace(/\[webport\]/g, portStr);
                 var baseUrl =
@@ -63,9 +64,12 @@ var portReplace = function() {
 
                 result = clearEnv(result, obj.env);
                 result = clearOtherEnv(result, obj.env);
-
+                
                 fs.writeFile(f, result, 'utf8', function(err) {
-                    if (err) return console.log(err);
+                    if (err) {
+                        throw err;
+                    }
+                    
                 });
             });
         });
@@ -89,13 +93,17 @@ var copy = function() {
         const url = path.join(__dirname, '../dist/', obj.title);
 
         fs.remove(url, function(err) {
-            if (err) return console.error(err);
+            if (err) {
+                throw err;
+            }
 
             //var result = data.replace(/\[webport\]/g, portStr);
 
             fs.copy(src, url, function(err) {
                 console.log('copy');
-                if (err) return console.error(err);
+                if (err) {
+                    throw err;
+                }
                 console.log(obj.title + 'copy success!');
                 copyNum++;
             });
@@ -115,7 +123,7 @@ var replaceManifest = function() {
     entryHtml.forEach(f => {
         fs.readFile(f, 'utf8', function(err, data) {
             if (err) {
-                return console.log(err);
+                throw err;
             }
 
             var result = data.replace(
@@ -124,7 +132,9 @@ var replaceManifest = function() {
             );
 
             fs.writeFile(f, result, 'utf8', function(err) {
-                if (err) return console.log(err);
+                if (err) {
+                    throw err;
+                }
             });
         });
     });
