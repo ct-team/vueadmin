@@ -1,5 +1,5 @@
 export default {
-    add: 1,
+    view: 1,
     del: 2,
     edit: 3
 };

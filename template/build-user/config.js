@@ -1,5 +1,5 @@
 module.exports = {
-    version:'1.8.0', //脚手架版本【不需改动】
+    version:'1.9.0', //脚手架版本【不需改动】
     chunk: true, //是否开启动态chunk
     check: false,//是否增加错误收集
     isHttps:false,//是否使用https true 的话1505 1507 2505资源将使用https资源地址
@@ -20,7 +20,7 @@ module.exports = {
     proxy: {
         '/api': {
             //印射为/api
-            target: 'http://yapi.tcy365.org:3000/mock/123/', // 接口域名
+            target: 'http://yapi.tcy365.org:3000/mock/614/', // 接口域名
             changeOrigin: true, //是否跨域
             pathRewrite: {
                 '^/api': '/api' //需要rewrite的,

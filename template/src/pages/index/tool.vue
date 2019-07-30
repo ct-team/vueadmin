@@ -1,12 +1,16 @@
 <template>
-  <el-row class="dt-tool">
-    <el-button type="primary"
-               icon="el-icon-plus"
-               v-if="$dart.permission.is('add')"
-               @click="handleGoAdd">新增</el-button>
-    <el-button type="success"
-               icon="el-icon-upload">导出</el-button>
-  </el-row>
+    <div class="dt-tool">
+        <el-row>
+            <el-button
+                plain
+                icon="el-icon-plus"
+                @click="handleGoAdd">新增</el-button>
+            <el-button
+                    plain
+                    icon="el-icon-download"
+                    @click="handleExport">导出</el-button>
+        </el-row>
+    </div>
 </template>
 
 <script>
@@ -14,7 +18,17 @@ export default {
     methods: {
         handleGoAdd() {
             this.$router.push({ path: 'add' });
+        },
+        handleExport() {
+            this.$emit('export');
         }
     }
 };
 </script>
+
+<style lang="scss" scoped>
+.dt-tool{
+    margin-bottom: 10px;
+    text-align: right;
+}
+</style>

@@ -1,41 +1,41 @@
 <template>
-  <div>
     <dart-slide :visible="slideVisible"
                 :title="slideTitle"
-                width="90%"
+                width="60%"
                 :loading="slideLoading"
                 :afterClose="handleClose">
-      <el-form :model="formData"
-               :rules="rules"
-               ref="editForm"
-               label-width="200px"
-               class="ruleForm">
+        <el-form :model="formData"
+                :rules="rules"
+                ref="addForm"
+                label-width="auto"
+                class="dt-form">
         <el-form-item label="姓名"
-                      prop="name">
-          <el-input v-model="formData.name"></el-input>
+                        prop="name">
+            <el-input v-model="formData.name"></el-input>
         </el-form-item>
         <el-form-item label="日期"
-                      prop="date">
-          <el-date-picker v-model="formData.date"
-                          type="date">
-          </el-date-picker>
+                        prop="date">
+            <el-date-picker v-model="formData.date"
+                            type="date">
+            </el-date-picker>
         </el-form-item>
         <el-form-item label="地址"
-                      prop="address">
-          <el-input type="textarea"
+                        prop="address">
+            <el-input type="textarea"
                     v-model="formData.address"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary"
-                     @click="handleSubmit">保存</el-button>
+            <el-button type="primary"
+                        @click="handleSubmit">保存</el-button>
         </el-form-item>
-      </el-form>
+        </el-form>
     </dart-slide>
-
-  </div>
 </template>
 <script>
-import apiAdd from '@/api/add';
+import { apiSaveAddForm } from '@/api/index/index';
+import code from '@/config/index/code';
+import con from '@/config/index/const';
+
 export default {
     data() {
         return {
@@ -45,8 +45,7 @@ export default {
             formData: { //表单数据
                 name: '',
                 date: '',
-                address: '',
-                desc: ''
+                address: ''
             },
             rules: { //表单验证规则
                 name: [
@@ -56,24 +55,47 @@ export default {
                 date: [{ required: true, message: '请输入活动时间', trigger: 'blur' }],
                 address: [
                     { required: true, message: '请选择活动区域', trigger: 'blur' }
-                ],
-                desc: [{ required: true, message: '请填写活动形式', trigger: 'blur' }]
+                ]
             }
         };
     },
     methods: {
         handleSubmit() {
-            this.$refs.editForm.validate(valid => {
+            this.$refs.addForm.validate(valid => {
                 if (valid) {
                     this.saveData();
                 } else {
                     this.$message({
-                        message: '验证失败，请检查输入项',
+                        message: con.errorMessage,
                         type: 'error'
                     });
                     return false;
                 }
             });
+        },
+        saveData() {
+            this.setSlideLoading(true);
+            const params = {
+                data: this.formData,
+                complete: () => {
+                    this.setSlideLoading(false);
+                }
+            };
+
+            apiSaveAddForm(params).then(res => {
+                if (res.Code === code.success) {
+                    this.handleClose();
+                    this.$bus.$emit('refreshTable', {pageIndex: con.pageIndex, pageSize: con.pageSize});
+                    this.$message.success(res.Message);
+                } else {
+                    this.$message.error(res.Message);
+                }
+            }).catch(() => {
+                this.$message.error(con.httpErrorMessage);
+            });
+        },
+        handleClose() {
+            this.$router.push({ path: '/' });
         },
         /**
          * @function {设置侧边栏loading状态}
@@ -81,37 +103,10 @@ export default {
          */
         setSlideLoading(type) {
             this.slideLoading = type;
-        },
-        saveData() {
-            this.setSlideLoading(true);
-            apiAdd({
-                data: this.formData,
-                complete: () => {
-                    this.setSlideLoading(false);
-                },
-                success: res => {
-                    if (res.Code === 0) {
-                        this.$bus.$emit('refreshTable', 1);
-                        this.handleClose();
-                    }
-                }
-            });
-        },
-        handleClose() {
-            this.$router.push({ path: '/' });
         }
     }
 };
 </script>
-<style scoped>
-.ruleForm {
-  padding-right: 100px;
-}
-.line {
-  text-align: center;
-}
-.dart-slide-errorbox {
-  text-align: center;
-  margin-top: 10%;
-}
+<style lang="scss">
+@import '../../../assets/scss/form.scss';
 </style>

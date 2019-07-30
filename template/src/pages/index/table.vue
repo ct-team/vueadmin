@@ -1,56 +1,66 @@
  <template>
-  <div>
-    <el-table v-loading="loading"
-              :data="tableData"
-              :empty-text="message"
-              border
-              style="width: 100%">
-      <el-table-column prop="date"
-                       label="日期"
-                       width="180">
-      </el-table-column>
-      <el-table-column prop="name"
-                       label="姓名"
-                       width="180">
-      </el-table-column>
-      <el-table-column prop="address"
-                       label="地址">
-      </el-table-column>
-      <el-table-column label="操作"
-                       width="280px">
-        <template slot-scope="scope">
-          <el-button icon="el-icon-edit"
-                     type="primary"
-                     v-if="$dart.permission.is('edit')"
-                     @click="handleGoEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button icon="el-icon-document"
-                     type="success"
-                     @click="handleGoView(scope.$index, scope.row)">查看</el-button>
-          <ct-table-del-button style="margin-left:10px"
-                      v-if="$dart.permission.is('del')"
-                      :loading="scope.row.loading"
-                      @onOk="handleDelete(scope.$index, scope.row)"></ct-table-del-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div class="dt-page"
-         v-show="pageData.currentPage >= 1">
-      <el-pagination @current-change="handleCurrentChange"
-                     :current-page="pageData.currentPage"
-                     :page-size="pageData.pageSize"
-                     background
-                     layout="total, prev, pager, next, jumper"
-                     :total="pageData.total">
-      </el-pagination>
+    <div>
+        <el-table
+                v-loading="loading"
+                :data="tableData"
+                :empty-text="message"
+                border
+                style="width: 100%">
+            <el-table-column
+                        prop="id"
+                        label="ID">
+            </el-table-column>
+            <el-table-column
+                        prop="date"
+                        label="日期">
+            </el-table-column>
+            <el-table-column
+                        prop="name"
+                        label="姓名">
+            </el-table-column>
+            <el-table-column
+                        prop="address"
+                        label="地址">
+            </el-table-column>
+            <el-table-column
+                        label="操作"
+                        width="180px">
+            <template slot-scope="scope">
+                <el-button
+                        icon="el-icon-document"
+                        type='text'
+                        v-if="$dart.permission.is('view')"
+                        @click="handleGoView(scope.row)">查看</el-button>
+                <el-button
+                        icon="el-icon-edit"
+                        type='text'
+                        v-if="$dart.permission.is('edit')"
+                        @click="handleGoEdit(scope.row)">编辑</el-button>
+                <dart-delete-button
+                                style="margin-left:10px"
+                                type='text'
+                                icon='el-icon-delete'
+                                v-if="$dart.permission.is('del')"
+                                @ok="handleDelete(scope.$index, scope.row)"></dart-delete-button>
+            </template>
+            </el-table-column>
+        </el-table>
+    <div v-show="pagination.total > 0">
+        <pagination
+            :total="pagination.total"
+            :page.sync="pagination.pageIndex" :limit.sync="pagination.pageSize" @pagination="handlePagination" />
     </div>
 
-  </div>
+    </div>
 
 </template>
 
 <script>
-import apiDel from '@/api/del';
-import ctTableDelButton from './table-del-button';
+import { apiDelTableRow } from '@/api/index/index';
+import Pagination from '@/components/pagination';
+import code from '@/config/index/code';
+import con from '@/config/index/const.js';
+
 export default {
     data() {
         return {
@@ -70,72 +80,12 @@ export default {
         },
         message: {
             type: String,
-            default: '没有查询到符合条件的记录'
+            default: con.tableMessage
         },
-        pageData: {
-            type: Object,
-            default() {
-                return {
-                    currentPage: 0,
-                    total: 0,
-                    pageSize: 0
-                };
-            }
-        }
+        pagination: Object
     },
     components: {
-        ctTableDelButton
-    },
-    methods: {
-        /**
-         * @function {分页点击处理事件}
-         * @param  {int} index {页码}
-         */
-        handleCurrentChange(index) {
-            this.$bus.$emit('refreshTable', index);
-        },
-        handleGoEdit(index, row) {
-            this.$router.push({
-                path: 'edit',
-                query: {
-                    id: index
-                }
-            });
-        },
-        handleGoView(index, row) {
-            this.$router.push({
-                path: 'view',
-                query: {
-                    id: index
-                }
-            });
-        },
-        /**
-         * @function {设置列表删除按钮loading状态}
-         * @param  {int} index {列表数据下标}
-         * @param  {boolean} value {loading状态}
-         */
-        setTableDelLoading(index, value) {
-            this.$set(this.tableData[index], 'loading', value);
-        },
-        /**
-         * @function {列表删除}
-         * @param  {int} index {列表数据下标}
-         */
-        handleDelete(index) {
-            this.setTableDelLoading(index, true);
-            apiDel({
-                data: { id: index },
-                success: res => {
-                    if (res.Code === 0) {
-                        this.$bus.$emit('refreshTable');
-                    }
-                },
-                complete: () => {
-                    this.setTableDelLoading(index, false);
-                }
-            });
-        }
+        Pagination
     },
     watch: {
         data: {
@@ -143,6 +93,53 @@ export default {
             handler(v) {
                 this.tableData = v;
             }
+        }
+    },
+    methods: {
+        /**
+         * @function {分页点击处理事件}
+         */
+        handlePagination() {
+            this.$bus.$emit('refreshTable');
+        },
+        handleGoEdit(row) {
+            this.$router.push({
+                path: 'edit',
+                query: {
+                    id: row.id
+                }
+            });
+        },
+        handleGoView(row) {
+            this.$router.push({
+                path: 'view',
+                query: {
+                    id: row.id
+                }
+            });
+        },
+
+        /**
+         * @function {function 删除列表行数据}
+         * @param  {type} index {列表数据下标,正式项目中请使用唯一id}
+         */
+        handleDelete(index) {
+            const params = {
+                data: {
+                    id: index
+                }
+            };
+
+            apiDelTableRow(params).then(res => {
+                if (res.Code === code.success) {
+                    this.$bus.$emit('refreshTable');
+                    this.$message.success(res.Message);
+                } else {
+                    this.$message.error(res.Message);
+                }
+            }).catch(() => {
+                this.$message.error(con.httpErrorMessage);
+            });
         }
     }
 };
