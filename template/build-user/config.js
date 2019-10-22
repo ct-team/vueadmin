@@ -1,8 +1,8 @@
 module.exports = {
-    version:'1.9.2', //脚手架版本【不需改动】
+    version:'1.9.3', //脚手架版本【不需改动】
     chunk: true, //是否开启动态chunk
     check: false,//是否增加错误收集
-    isHttps:false,//是否使用https true 的话1505 1507 2505资源将使用https资源地址
+    isHttps:true,//是否使用https true 的话1505 1507 2505资源将使用https资源地址
     appID: 'test', //项目服务代号 作为checkid
     appVersion:'1.0.0', //项目版本 会显示在页面meta内
     baseUrl: '//staticadm.tcy365[webport]', //项目资源根目录 [webport] 后缀标识符 默认不修改
