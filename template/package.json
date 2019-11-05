@@ -1,6 +1,6 @@
 {
     "name": "vueadmin",
-    "version": "1.9.4",
+    "version": "1.9.5",
     "description": "A admin Vue.js project",
     "author": "daixl <328581342@qq.com>",
     "private": true,
@@ -11,7 +11,7 @@
         "build": "node build/build.js"
     },
     "dependencies": {
-        "dart": "^1.0.14",
+        "ct-dart": "^1.7.2",
         "vux": "^2.9.1",
         "vux-loader": "^1.2.9"
     },

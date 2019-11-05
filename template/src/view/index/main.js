@@ -13,7 +13,7 @@ import {
     SearchItem,
     Toolbar,
     DeleteButton
-} from 'dart';
+} from 'ct-dart';
 Vue.use(DateRange);
 Vue.use(Slide);
 Vue.use(Http);

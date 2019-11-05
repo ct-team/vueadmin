@@ -1,5 +1,5 @@
 module.exports = {
-    version:'1.9.4', //脚手架版本【不需改动】
+    version:'1.9.5', //脚手架版本【不需改动】
     chunk: true, //是否开启动态chunk
     check: false,//是否增加错误收集
     isHttps:true,//是否使用https true 的话1505 1507 2505资源将使用https资源地址
